@@ -7,13 +7,23 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defn hello-world []
-  [:h1 "Hello World!!!"])
+(defn mytable-render []
+  [:div
+   [:h2 "I will be a table in future!!!"]])
+
+(defn mytable []
+  (reagent/create-class {:reagent-render mytable-render}))
+
+
+(defn mainpage []
+  [:div
+   [:h1 "Hello World!!!"]
+   [mytable]])
 
 (defn reload []
-  (reagent/render [hello-world]
+  (reagent/render [mainpage]
                   (. js/document (getElementById "app"))))
 
 (defn ^:export main []
-  (reagent/render [hello-world]
+  (reagent/render [mainpage]
                   (. js/document (getElementById "app"))))
