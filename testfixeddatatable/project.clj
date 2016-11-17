@@ -15,7 +15,8 @@
                  [cljs-react-material-ui "0.2.21"]
                  [com.taoensso/timbre "4.7.4"]
                  [re-frame "0.8.0"]
-                 [cljsjs/fixed-data-table "0.6.3-0"]]
+                 [cljsjs/fixed-data-table "0.6.3-0"]
+                 [cljsjs/handsontable "0.26.1-0"]]
 
   :plugins [[lein-figwheel "0.5.8"]
             [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]]

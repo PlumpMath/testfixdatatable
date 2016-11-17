@@ -1,55 +1,124 @@
 (ns testfixeddatatable.core
   (:require [reagent.core :as reagent]
-            [cljsjs.fixed-data-table]))
+            [cljsjs.fixed-data-table]
+            [cljsjs.handsontable]))
 
 
 (enable-console-print!)
 
 (println "This text is printed from src/testfixeddatatable/core.cljs. Go ahead and edit it and see reloading in action.")
 
-(def Table (reagent/adapt-react-class js/FixedDataTable.Table))
-(def Column (reagent/adapt-react-class js/FixedDataTable.Column))
-(def Cell (reagent/adapt-react-class js/FixedDataTable.Cell))
+(def app-state (reagent/atom {:sort-val :first-name :ascending true}))
 
-(defn gen-table
-      "Generate `size` rows vector of 4 columns vectors to mock up the table."
-      [size]
-      (mapv (fn [i]
-                {"number" i
-                 "amount" (rand-int 1000)
-                 "coeff" (rand)
-                 "store" (rand-nth ["Here" "There" "Nowhere" "Somewhere"])})
-            (range 1 (inc size))))
+(def init-tableconfig {
+                       :data        [
+                                     ["" "Kia" "Nissan" "Toyota" "Honda"]
+                                     ["2008" 0 0 0 0]
+                                     ["2009" 0 0 0 0]
+                                     ["2010" 0 0 0 0]]
+                       :rowHeaders  false
+                       :colHeaders  false
+                       :contextMenu false})
 
-(def table (gen-table 10))
 
-(defn make-cell [args]
-      (let [{:strs [columnKey rowIndex]} (js->clj args)]
-           (reagent/as-element [Cell (get-in table [rowIndex columnKey])])))
 
-(defn mytable-reandera []
-      [:div
-       [Table {:width        600
-               :height       400
-               :rowHeight    50
-               :rowsCount    (count table)
-               :headerHeight 50}
-        [Column {:header "Number" :cell make-cell :columnKey "number" :width 100}]
-        [Column {:header "Amount" :cell make-cell :columnKey "amount" :width 100}]
-        [Column {:header "Coeff" :cell make-cell :columnKey "coeff" :width 100}]
-        [Column {:header "Store" :cell make-cell :columnKey "store" :width 100}]]])
+(defn sampleTable-render []
+  [:div {:style {:min-width "310px" :max-width "800px" :margin "0 auto"}}])
+
+(defn sampleTable-did-mount [this]
+  (js/Handsontable (reagent/dom-node this) (clj->js init-tableconfig)))
+
+(defn sampleTable []
+  (reagent/create-class {:reagent-render      sampleTable-render
+                         :component-did-mount sampleTable-did-mount}))
+
+(def table-contents
+  [{:id 1 :first-name "Bram"    :last-name "Moolenaar"  :known-for "Vim"}
+   {:id 2 :first-name "Richard" :last-name "Stallman"   :known-for "GNU"}
+   {:id 3 :first-name "Dennis"  :last-name "Ritchie"    :known-for "C"}
+   {:id 4 :first-name "Rich"    :last-name "Hickey"     :known-for "Clojure"}
+   {:id 5 :first-name "Guido"   :last-name "Van Rossum" :known-for "Python"}
+   {:id 6 :first-name "Linus"   :last-name "Torvalds"   :known-for "Linux"}
+   {:id 7 :first-name "Yehuda"  :last-name "Katz"       :known-for "Ember"}])
+
+(defn update-sort-value [new-val]
+  (if (= new-val (:sort-val @app-state))
+    (swap! app-state update-in [:ascending] not)
+    (swap! app-state assoc :ascending true))
+  (swap! app-state assoc :sort-val new-val))
+
+(defn sorted-contents []
+  (let [sorted-contents (sort-by (:sort-val @app-state) table-contents)]
+    (if (:ascending @app-state)
+      sorted-contents
+      (rseq sorted-contents))))
+
+(defn sort_table []
+  [:div {:style {:margin "auto"
+                 :padding-top "30px"
+                 :width "600px"}}
+    [:table
+     [:thead
+      [:tr
+       [:th {:width "200" :on-click #(update-sort-value :first-name)} "First Name"]
+       [:th {:width "200" :on-click #(update-sort-value :last-name) } "Last Name"]
+       [:th {:width "200" :on-click #(update-sort-value :known-for) } "Known For"]]]
+     [:tbody
+      (for [person (sorted-contents)]
+        ^{:key (:id person)}
+        [:tr [:td (:first-name person)]
+         [:td (:last-name person)]
+         [:td (:known-for person)]])]]])
 
 (defn mytable-render []
-      [:div
-       [:h2 "I will be a table in future!!!"]])
+  [:div {:style {:min-width "310px" :max-width "800px" :margin "0 auto"}}])
 
 (defn mytable []
-      (reagent/create-class {:reagent-render mytable-reandera}))
+      (reagent/create-class {:reagent-render mytable-render}))
 
+(defn myDataTable-render []
+  [:table.table.table-striped.table-bordered
+      {:cell-spacing "0" :width "100%"}
+
+      [:thead>tr
+       [:th "Name"]
+       [:th "Age"]]
+
+      [:tbody
+       [:tr
+        [:td "Matthew"]
+        [:td "26"]]
+
+       [:tr
+        [:td "Anna"]
+        [:td "24"]]
+
+       [:tr
+        [:td "Michelle"]
+        [:td "42"]]
+
+       [:tr
+        [:td "Frank"]
+        [:td "46"]]]])
+
+(defn myDataTable-did-mount [this]
+  (.DataTable (js/$ (reagent/dom-node this))))
+
+
+(defn myDataTable []
+  (reagent/create-class {:reagent-render myDataTable-render
+                         :component-did-mount myDataTable-did-mount}))
+
+(defn hellotag []
+  [:div "Hello World"])
 
 (defn mainpage []
       [:div
-       [mytable]])
+       [hellotag]
+       [sampleTable]
+       [sort_table]
+       [myDataTable]])
+
 
 (defn reload []
       (reagent/render [mainpage]
