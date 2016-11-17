@@ -1,0 +1,13 @@
+[0mCompiling "resources/public/js/compiled/testfixeddatatable.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/testfixeddatatable.js" in 0.345 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/testfixeddatatable/core.js
+[0mCompiling "resources/public/js/compiled/testfixeddatatable.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/testfixeddatatable.js" in 0.292 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/testfixeddatatable/core.js
+[0mCompiling "resources/public/js/compiled/testfixeddatatable.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/testfixeddatatable.js" in 0.294 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/testfixeddatatable/core.js
