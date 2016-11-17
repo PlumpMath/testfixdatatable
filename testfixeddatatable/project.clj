@@ -8,11 +8,14 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
-                 [org.clojure/core.async "0.2.391"
-                  :exclusions [org.clojure/tools.reader]]
-                 [reagent "0.6.0"]
+                 ;; Material UI requires react to be excluded
+                 [reagent "0.6.0" :exclusions [cljsjs/react]]
+                 [cljs-ajax "0.5.8"]
+                 [binaryage/devtools "0.8.1"]
+                 [cljs-react-material-ui "0.2.21"]
+                 [com.taoensso/timbre "4.7.4"]
+                 [re-frame "0.8.0"]
                  [cljsjs/fixed-data-table "0.6.3-0"]]
-
 
   :plugins [[lein-figwheel "0.5.8"]
             [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]]
