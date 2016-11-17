@@ -1,11 +1,11 @@
 (ns testfixeddatatable.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent :refer [atom]]
+            [cljsjs.fixed-data-table]))
 
 (enable-console-print!)
 
 (println "This text is printed from src/testfixeddatatable/core.cljs. Go ahead and edit it and see reloading in action.")
 
-;; define your app data so that it doesn't get over-written on reload
 
 (defn mytable-render []
       [:div
